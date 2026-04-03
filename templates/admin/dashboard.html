@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - House Worker Hiring Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+            <p class="text-muted">Platform Overview and Management</p>
+        </div>
+    </div>
+
+    <!-- Platform Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="card text-center bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_users }}</h5>
+                    <p class="card-text">Total Users</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_workers }}</h5>
+                    <p class="card-text">Workers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_employers }}</h5>
+                    <p class="card-text">Employers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_jobs }}</h5>
+                    <p class="card-text">Total Jobs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center bg-secondary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">{{ open_jobs }}</h5>
+                    <p class="card-text">Open Jobs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center bg-dark text-white">
+                <div class="card-body">
+                    <h5 class="card-title">1</h5>
+                    <p class="card-text">Admins</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Users -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-users"></i> Recent Users</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_users %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Role</th>
+                                        <th>Joined</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in recent_users %}
+                                        <tr>
+                                            <td>{{ user.username }}</td>
+                                            <td>
+                                                {% if user.role == 'worker' %}
+                                                    <span class="badge bg-success">{{ user.role|title }}</span>
+                                                {% elif user.role == 'employer' %}
+                                                    <span class="badge bg-info">{{ user.role|title }}</span>
+                                                {% elif user.role == 'admin' %}
+                                                    <span class="badge bg-danger">{{ user.role|title }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                                            <td>
+                                                {% if user.is_active %}
+                                                    <span class="badge bg-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No users registered yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Jobs -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-briefcase"></i> Recent Jobs</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_jobs %}
+                        {% for job in recent_jobs %}
+                            <div class="mb-3 p-2 border rounded">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6>{{ job.title }}</h6>
+                                        <p class="mb-1">Employer: <strong>{{ job.employer.username }}</strong></p>
+                                        <p class="mb-1 text-muted small">{{ job.location }}</p>
+                                        <p class="mb-1 text-muted small">{{ job.salary_range }}</p>
+                                    </div>
+                                    <div>
+                                        {% if job.status == 'open' %}
+                                            <span class="badge bg-info">Open</span>
+                                        {% elif job.status == 'in_progress' %}
+                                            <span class="badge bg-warning">In Progress</span>
+                                        {% elif job.status == 'completed' %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% endif %}
+                                        {% if job.is_urgent %}
+                                            <span class="badge bg-danger">Urgent</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">{{ job.created_at|date:"M d, Y H:i" }}</small>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No jobs posted yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-tools"></i> Admin Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="/admin/" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="fas fa-cog"></i> Django Admin
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'workers:worker_list' %}" class="btn btn-outline-success w-100 mb-2">
+                                <i class="fas fa-users"></i> Manage Workers
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'hiring:job_list' %}" class="btn btn-outline-info w-100 mb-2">
+                                <i class="fas fa-briefcase"></i> View All Jobs
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-outline-warning w-100 mb-2">
+                                <i class="fas fa-chart-bar"></i> Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> System Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><strong>Django Version:</strong> 4.2.7</p>
+                            <p><strong>Database:</strong> SQLite</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Platform Status:</strong> <span class="badge bg-success">Operational</span></p>
+                            <p><strong>Last Backup:</strong> N/A</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Total Storage:</strong> N/A</p>
+                            <p><strong>Active Sessions:</strong> N/A</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

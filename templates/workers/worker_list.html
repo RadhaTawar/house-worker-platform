@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Workers - House Worker Hiring Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-md-8 mx-auto text-center">
+            <h1 class="display-5 fw-bold mb-3">Available Workers</h1>
+            <p class="text-muted lead">Find skilled and verified workers for your household needs.</p>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-md-10 mx-auto">
+            <div class="card p-3 shadow-sm">
+                <form method="GET" action="{% url 'workers:worker_list' %}" class="row g-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="search" class="form-control border-start-0"
+                                placeholder="Search workers..." value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="skill" class="form-control" placeholder="Filter by skills..."
+                            value="{{ skill_filter }}">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="sort" class="form-select">
+                            <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Top Rated</option>
+                            <option value="experience" {% if sort_by == 'experience' %}selected{% endif %}>Most Experience</option>
+                            <option value="rate_low" {% if sort_by == 'rate_low' %}selected{% endif %}>Rate: Low to High</option>
+                            <option value="rate_high" {% if sort_by == 'rate_high' %}selected{% endif %}>Rate: High to Low</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workers Grid -->
+    <div class="row g-4">
+        {% if workers %}
+        {% for worker in workers %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 worker-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-circle bg-primary text-white me-3">
+                            {{ worker.user.first_name.0 }}{{ worker.user.last_name.0 }}
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="card-title fw-bold mb-1">{{ worker.user.first_name }} {{ worker.user.last_name }}</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="stars me-2">
+                                    {% for i in "12345" %}
+                                        <i class="fas fa-star {% if forloop.counter <= worker.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <span class="text-muted small">({{ worker.rating }}/5)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-success-light text-success me-2 mb-2">
+                            <i class="fas fa-check-circle me-1"></i>Verified
+                        </span>
+                        {% if worker.availability %}
+                        <span class="badge bg-info-light text-info mb-2">
+                            <i class="fas fa-clock me-1"></i>Available
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="card-text text-muted small mb-3">{{ worker.skills|truncatewords:15 }}</p>
+                    
+                    <div class="row text-muted small mb-3">
+                        <div class="col-6">
+                            <i class="fas fa-briefcase me-1"></i> {{ worker.experience_years }} years
+                        </div>
+                        <div class="col-6">
+                            <i class="fas fa-dollar-sign me-1"></i> ${{ worker.hourly_rate }}/hr
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">{{ worker.completed_jobs }} jobs completed</span>
+                        <a href="{% url 'workers:worker_detail' worker.id %}" 
+                           class="btn btn-outline-primary btn-sm rounded-pill px-4">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-users fa-4x text-muted opacity-25"></i>
+            </div>
+            <h3>No workers found</h3>
+            <p class="text-muted">Try adjusting your search filters or check back later.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="row mt-5">
+        <div class="col-md-8 mx-auto">
+            <nav aria-label="Worker pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&skill={{ skill_filter }}&sort={{ sort_by }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}&search={{ search_query }}&skill={{ skill_filter }}&sort={{ sort_by }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&skill={{ skill_filter }}&sort={{ sort_by }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .worker-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 16px;
+    }
+
+    .worker-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .avatar-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .stars {
+        font-size: 12px;
+    }
+
+    .bg-success-light {
+        background-color: #D1FAE5;
+    }
+
+    .bg-info-light {
+        background-color: #DBEAFE;
+    }
+</style>
+{% endblock %}

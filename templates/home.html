@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - House Worker Hiring Platform{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        position: relative;
+        padding: 160px 0 120px;
+        background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4)),
+            /*url('https://images.unsplash.com/photo-1556911228-dd9147988a50?auto=format&fit=crop&q=80&w=1920');*/
+            url('/static/images/bg1.jpeg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 24px;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 600px;
+        margin: 0 auto 48px;
+    }
+
+    .search-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 12px;
+        background: white;
+        padding: 8px;
+        border-radius: 16px;
+    }
+
+    .search-input {
+        border: none;
+        padding: 12px 20px;
+        font-size: 1rem;
+        flex: 1;
+    }
+
+    .search-input:focus {
+        outline: none;
+    }
+
+    .category-card {
+        position: relative;
+        height: 300px;
+        border-radius: 24px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .category-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .category-card:hover .category-image {
+        transform: scale(1.1);
+    }
+
+    .category-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 40px 24px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+    }
+
+    .feature-icon {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        margin-bottom: 24px;
+        font-size: 1.5rem;
+    }
+
+    .bg-indigo-light {
+        background-color: #EEF2FF;
+        color: #4F46E5;
+    }
+
+    .bg-emerald-light {
+        background-color: #ECFDF5;
+        color: #10B981;
+    }
+
+    .bg-amber-light {
+        background-color: #FFFBEB;
+        color: #F59E0B;
+    }
+
+    .step-number {
+        width: 48px;
+        height: 48px;
+        background: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: 700;
+        margin: 0 auto 24px;
+        box-shadow: 0 8px 16px -4px rgba(79, 70, 229, 0.4);
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        padding: 100px 0;
+        border-radius: 48px;
+        margin: 60px 0;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container animate-up">
+        <h1 class="hero-title">Find Trusted Help <br>For Your Home</h1>
+        <p class="hero-subtitle">Connect with thousands of verified professionals ready to help with cleaning, cooking,
+            gardening and more.</p>
+
+        <div class="search-container">
+            <div class="search-form">
+                <input type="text" class="search-input" placeholder="What service do you need?">
+                <div class="vr mx-2 my-auto" style="height: 30px;"></div>
+                <input type="text" class="search-input" placeholder="Your Location">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i> Find Workers
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5" style="margin-top: -60px;">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card h-100 p-4">
+                    <div class="card-body">
+                        <div class="feature-icon bg-indigo-light">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 class="mb-3">Verified Experts</h4>
+                        <p class="text-muted">Every worker on our platform undergoes a rigorous background check and
+                            verification process for your peace of mind.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100 p-4">
+                    <div class="card-body">
+                        <div class="feature-icon bg-emerald-light">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4 class="mb-3">Swift Booking</h4>
+                        <p class="text-muted">Need help now? Our instant booking system connects you with available
+                            professionals in your area within minutes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100 p-4">
+                    <div class="card-body">
+                        <div class="feature-icon bg-amber-light">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4 class="mb-3">Top-Rated Service</h4>
+                        <p class="text-muted">Browse real reviews and ratings from our community to find the perfect
+                            match for your specific household needs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Categories -->
+<section class="py-5 mt-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h2 class="display-5 mb-0">Popular Categories</h2>
+                <p class="text-muted mt-2">Explore our most requested house services</p>
+            </div>
+            <a href="#" class="btn btn-link text-primary fw-600 text-decoration-none p-0 mb-2">View All Categories <i
+                    class="fas fa-arrow-right ms-1"></i></a>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800"
+                        alt="Cleaning" class="category-image">
+                    <div class="category-overlay">
+                        <h5 class="mb-1">House Cleaning</h5>
+                        <p class="small opacity-75 mb-0">245 Available Workers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800"
+                        alt="Cooking" class="category-image">
+                    <div class="category-overlay">
+                        <h5 class="mb-1">Professional Cooking</h5>
+                        <p class="small opacity-75 mb-0">189 Available Workers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=800"
+                        alt="Childcare" class="category-image">
+                    <div class="category-overlay">
+                        <h5 class="mb-1">Expert Childcare</h5>
+                        <p class="small opacity-75 mb-0">156 Available Workers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=800"
+                        alt="Gardening" class="category-image">
+                    <div class="category-overlay">
+                        <h5 class="mb-1">Garden Care</h5>
+                        <p class="small opacity-75 mb-0">98 Available Workers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5 bg-white mt-5">
+    <div class="container py-5">
+        <h2 class="text-center display-5 mb-5">How HouseWorker Hub Works</h2>
+        <div class="row g-5">
+            <div class="col-md-4 text-center">
+                <div class="step-number">1</div>
+                <h4>Create Your Profile</h4>
+                <p class="text-muted px-4">Sign up as a homeowner or a professional worker in just simple steps.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="step-number">2</div>
+                <h4>Find Your Match</h4>
+                <p class="text-muted px-4">Browse through thousands of verified profiles or post your specific job
+                    requirements.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="step-number">3</div>
+                <h4>Secure Connection</h4>
+                <p class="text-muted px-4">Connect, negotiate, and hire with confidence using our secure platform.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<div class="container">
+    <section class="cta-section text-center">
+        <div class="py-4">
+            <h2 class="display-4 fw-bold mb-4">Ready to find the <br>perfect help?</h2>
+            <p class="lead opacity-75 mb-5">Join our community of thousands of satisfied homeowners today.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'authentication:register' %}"
+                    class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold">Get Started Now</a>
+                <a href="{% url 'authentication:login' %}"
+                    class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold">Sign In</a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

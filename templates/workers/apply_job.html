@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for Job - {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <!-- Job Details Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-indigo-light text-primary px-3 py-2 rounded-pill">{{ job.category.name }}</span>
+                        <span class="text-muted small"><i class="fas fa-clock me-1"></i> {{ job.created_at|timesince }} ago</span>
+                    </div>
+                    <h2 class="card-title fw-bold mb-3">{{ job.title }}</h2>
+                    <p class="card-text">{{ job.description }}</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-map-marker-alt me-3 text-primary"></i>
+                                <div>
+                                    <small class="text-muted d-block">Location</small>
+                                    <strong>{{ job.location }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-dollar-sign me-3 text-primary"></i>
+                                <div>
+                                    <small class="text-muted d-block">Budget</small>
+                                    <strong>${{ job.budget }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Form -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="card-title fw-bold mb-4">Apply for this Job</h3>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="cover_letter" class="form-label fw-bold">Cover Letter *</label>
+                            <textarea class="form-control" id="cover_letter" name="cover_letter" rows="6" 
+                                      placeholder="Tell the employer why you're the perfect fit for this job..." required></textarea>
+                            <div class="form-text">
+                                Explain your relevant experience, skills, and why you're interested in this position.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="proposed_rate" class="form-label fw-bold">Proposed Hourly Rate (Optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="proposed_rate" name="proposed_rate" 
+                                       placeholder="25.00" step="0.01" min="0">
+                            </div>
+                            <div class="form-text">
+                                You can suggest a different rate if you feel it's appropriate for your skills and experience.
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Application
+                            </button>
+                            <a href="{% url 'workers:browse_jobs' %}" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Jobs
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-indigo-light {
+        background-color: #EEF2FF;
+    }
+    
+    .card {
+        border-radius: 16px;
+    }
+    
+    .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+    }
+    
+    .btn-primary {
+        background-color: #6366f1;
+        border-color: #6366f1;
+    }
+    
+    .btn-primary:hover {
+        background-color: #4f46e5;
+        border-color: #4f46e5;
+    }
+</style>
+{% endblock %}

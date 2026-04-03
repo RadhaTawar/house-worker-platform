@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Jobs - House Worker Hiring Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-md-8 mx-auto text-center">
+            <h1 class="display-5 fw-bold mb-3">Available Jobs</h1>
+            <p class="text-muted lead">Find the perfect household job that matches your skills and location.</p>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-md-10 mx-auto">
+            <div class="card p-3 shadow-sm">
+                <form method="GET" action="{% url 'workers:browse_jobs' %}" class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i
+                                    class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="search" class="form-control border-start-0"
+                                placeholder="Search by title, description or location..." value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if cat.is_selected %}selected{% endif %}>
+                                {{ cat.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jobs Grid -->
+    <div class="row g-4">
+        {% if jobs %}
+        {% for job in jobs %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 job-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-indigo-light text-primary px-3 py-2 rounded-pill small">{{
+                            job.category.name }}</span>
+                        <span class="text-muted small"><i class="fas fa-clock me-1"></i> {{ job.created_at|timesince }}
+                            ago</span>
+                    </div>
+                    <h5 class="card-title fw-bold mb-2">{{ job.title }}</h5>
+                    <p class="card-text text-muted small mb-3">{{ job.description|truncatewords:20 }}</p>
+                    <div class="d-flex align-items-center mb-3 text-muted small">
+                        <i class="fas fa-map-marker-alt me-2"></i> {{ job.location }}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-primary">${{ job.budget }}</span>
+                        <a href="{% url 'hiring:job_detail' job.id %}"
+                            class="btn btn-outline-primary btn-sm rounded-pill px-4">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-search fa-4x text-muted opacity-25"></i>
+            </div>
+            <h3>No jobs found</h3>
+            <p class="text-muted">Try adjusting your search filters or check back later.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .job-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 16px;
+    }
+
+    .job-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .bg-indigo-light {
+        background-color: #EEF2FF;
+    }
+</style>
+{% endblock %}

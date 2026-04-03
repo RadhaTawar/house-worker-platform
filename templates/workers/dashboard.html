@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Worker Dashboard - House Worker Hiring Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-tachometer-alt"></i> Worker Dashboard</h2>
+                <div>
+                    <span class="badge bg-success">Available</span>
+                    <span class="badge bg-info">Rating: {{ profile.rating|floatformat:1 }}/5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_applications }}</h5>
+                    <p class="card-text">Total Applications</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">{{ pending_applications }}</h5>
+                    <p class="card-text">Pending</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-success">{{ accepted_applications }}</h5>
+                    <p class="card-text">Accepted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">${{ profile.hourly_rate|floatformat:2 }}</h5>
+                    <p class="card-text">Hourly Rate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Applications -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-briefcase"></i> Recent Applications</h5>
+                </div>
+                <div class="card-body">
+                    {% if applications %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Job Title</th>
+                                        <th>Employer</th>
+                                        <th>Status</th>
+                                        <th>Applied</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for application in applications %}
+                                        <tr>
+                                            <td>{{ application.job.title }}</td>
+                                            <td>{{ application.job.employer.username }}</td>
+                                            <td>
+                                                {% if application.status == 'pending' %}
+                                                    <span class="badge bg-warning">Pending</span>
+                                                {% elif application.status == 'accepted' %}
+                                                    <span class="badge bg-success">Accepted</span>
+                                                {% elif application.status == 'rejected' %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ application.applied_at|date:"M d, Y" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No applications yet. Start browsing jobs!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Jobs -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-search"></i> Latest Jobs</h5>
+                </div>
+                <div class="card-body">
+                    {% if available_jobs %}
+                        {% for job in available_jobs %}
+                            <div class="mb-3 p-2 border rounded">
+                                <h6>{{ job.title }}</h6>
+                                <p class="mb-1 text-muted small">{{ job.location }}</p>
+                                <p class="mb-1 text-muted small">{{ job.salary_range }}</p>
+                                <a href="{% url 'workers:apply_job' job.id %}" class="btn btn-sm btn-primary">Apply</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No jobs available at the moment.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="{% url 'workers:browse_jobs' %}" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="fas fa-search"></i> Browse Jobs
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'workers:worker_profile' %}" class="btn btn-outline-info w-100 mb-2">
+                                <i class="fas fa-user"></i> View Profile
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'workers:worker_list' %}" class="btn btn-outline-secondary w-100 mb-2">
+                                <i class="fas fa-users"></i> Other Workers
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-outline-success w-100 mb-2">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

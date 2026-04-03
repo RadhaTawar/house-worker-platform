@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - House Worker Hiring Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3><i class="fas fa-user-plus"></i> Register</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.username.id_for_label }}" class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="{{ user_form.username.name }}" 
+                                           id="{{ user_form.username.id_for_label }}" required>
+                                    {% if user_form.username.errors %}
+                                        <div class="text-danger">{{ user_form.username.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.email.id_for_label }}" class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="{{ user_form.email.name }}" 
+                                           id="{{ user_form.email.id_for_label }}" required>
+                                    {% if user_form.email.errors %}
+                                        <div class="text-danger">{{ user_form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="{{ user_form.first_name.name }}" 
+                                           id="{{ user_form.first_name.id_for_label }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="{{ user_form.last_name.name }}" 
+                                           id="{{ user_form.last_name.id_for_label }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.phone.id_for_label }}" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" name="{{ user_form.phone.name }}" 
+                                           id="{{ user_form.phone.id_for_label }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.role.id_for_label }}" class="form-label">Role</label>
+                                    <select class="form-select" name="{{ user_form.role.name }}" 
+                                            id="{{ user_form.role.id_for_label }}" required>
+                                        <option value="">Select Role</option>
+                                        <option value="worker">Worker</option>
+                                        <option value="employer">Employer</option>
+                                    </select>
+                                    {% if user_form.role.errors %}
+                                        <div class="text-danger">{{ user_form.role.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.password1.id_for_label }}" class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="{{ user_form.password1.name }}" 
+                                           id="{{ user_form.password1.id_for_label }}" required>
+                                    {% if user_form.password1.errors %}
+                                        <div class="text-danger">{{ user_form.password1.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ user_form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" name="{{ user_form.password2.name }}" 
+                                           id="{{ user_form.password2.id_for_label }}" required>
+                                    {% if user_form.password2.errors %}
+                                        <div class="text-danger">{{ user_form.password2.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Register
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <p>Already have an account? <a href="{% url 'authentication:login' %}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
