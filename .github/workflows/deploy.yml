@@ -29,7 +29,7 @@ jobs:
           DEBUG: 'True'
       
       - name: Run migrations check
-        run: python manage.py migrate --check
+        run: python manage.py migrate --noinput
         env:
           SECRET_KEY: 'test-secret-key-for-ci'
           DEBUG: 'True'
